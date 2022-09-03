@@ -2,14 +2,17 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import State, Attraction
 from .forms import StateCreateForm, AttractionCreateForm
 from django.views.generic.edit import CreateView
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
+from django.contrib.auth import authenticate, login
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
 
 
+#explain
+@login_required(login_url="/login/")
 def home(request):
   all_attractions = Attraction.objects.all()
   context = {"attractions": all_attractions, "name": request.user}
@@ -19,23 +22,24 @@ def logout_view(request):
   logout(request)
   return redirect("home")
 
+def login_view(request):
+  username = request.POST.get('username')
+  password = request.POST.get('password')
 
-def loginn(request):
-  context = {
-    "login_view": "active"
-  }
-  if request.method == "POST":
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-    user = authenticate(request, username=username, password=password)
-    if user != None:
-      login(request, user)
-      return redirect("home")
-    else:
-      return HttpResponse("Invalid Credentials")
-  return render(request, "registration/login.html", context)
+  user = authenticate(request, username=username, password=password)
 
+  # Check if a user is verified and authenticated
+  if user is not None:
+    # Use the returned user object in login()
+    login(request, user)
 
+    # Redirect to home page after logging in
+    return redirect("home")
+  else:
+    render(request, "registration/login.html")
+  return render(request, "registration/login.html")
+
+#explain
 class Register(CreateView):
   form_class = UserCreationForm
   success_url = reverse_lazy("login")

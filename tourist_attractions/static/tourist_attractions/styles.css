@@ -1,6 +1,15 @@
 table, th, td {
  border: 1px solid black;
 }
+
+#attract{
+ color: blue;
+}
+
+#state{
+ text-align: center;
+}
+
 table {
  border-collapse: collapse;
  width: 80%;

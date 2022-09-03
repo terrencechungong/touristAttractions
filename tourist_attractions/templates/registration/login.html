@@ -2,19 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Log In</title>
+    <title>Title</title>
 </head>
 <body>
-<form method="POST">
-    <!--make this a form.as_p instead of hard coded html-->
-    <label for="username">Username: </label>
-    <input name="username" type="text" placeholder="Enter a username">
-    <br>
-    <label for="password">Password: </label>
-    <input type="password" placeholder="password" name="password">
-    <br>
-    <input type="submit">
 
+<h1>Log in!</h1>
+<form method="post" action="{% url 'login' %}">
+{% csrf_token %}
+<label for="username">Username:</label>
+<input type="text" name="username" placeholder="Username"><label for="password">Password:</label>
+<input type="password" name="password" placeholder="Password">
+<input type="submit" name="" value="Login">
 </form>
+
 </body>
 </html>
